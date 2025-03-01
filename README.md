@@ -67,7 +67,7 @@ define('WP_HONEYBADGER_JS_TEST_NOTIFICATION', false);
 
 ## Support
 
-For issues and feature requests, please [create an issue](https://github.com/yourusername/wp-honeybadger/issues) on GitHub.
+For issues and feature requests, please [create an issue](https://github.com/honeybadger-io/honeybadger-wordpress/issues) on GitHub.
 
 ## License
 
