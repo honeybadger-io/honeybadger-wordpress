@@ -1,0 +1,15 @@
+{
+    "name": "yourusername/wp-honeybadger",
+    "description": "WordPress plugin for Honeybadger error tracking",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "honeybadger-io/honeybadger-php": "^2.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}
