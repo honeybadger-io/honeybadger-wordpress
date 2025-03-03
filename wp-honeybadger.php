@@ -40,6 +40,9 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 
 // Initialize the plugin
+if (!class_exists('WP_Honeybadger_Settings')) {
+    require_once __DIR__ . '/src/class-wp-honeybadger-settings.php';
+}
 if (!class_exists('WP_Honeybadger')) {
     require_once __DIR__ . '/src/class-wp-honeybadger.php';
 }

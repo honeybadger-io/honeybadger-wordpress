@@ -1,8 +1,25 @@
 {
-    "name": "yourusername/wp-honeybadger",
+    "name": "honeybadger-io/honeybadger-wordpress",
     "description": "WordPress plugin for Honeybadger error tracking",
+    "keywords": [
+        "honeybadger",
+        "error monitoring",
+        "exception tracking",
+        "error tracking",
+        "bug tracking",
+        "error reporting",
+        "exception reporting",
+        "bug reporting"
+    ],
     "type": "wordpress-plugin",
     "license": "MIT",
+    "homepage": "https://github.com/honeybadger-io/honeybadger-wordpress",
+    "authors": [
+        {
+            "name": "Pangratios Cosma",
+            "email": "pangratios.cosma@honeybadger.io"
+        }
+    ],
     "require": {
         "php": ">=7.2",
         "honeybadger-io/honeybadger-php": "^2.0"
