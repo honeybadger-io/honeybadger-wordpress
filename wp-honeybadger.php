@@ -5,7 +5,7 @@
  * Description: Honeybadger error (PHP and JavaScript) reporting for WordPress.
  * Tags: honeybadger, error monitoring, exception tracking, error tracking, bug tracking, error reporting, exception reporting, bug reporting
  * Version: 0.0.1
- * Author: Pangratios Cosma
+ * Author: Honeybadger
  * Author URI: https://www.honeybadger.io
  * License: MIT
  * License URI: https://github.com/honeybadger-io/honeybadger-wordpress/LICENSE.md

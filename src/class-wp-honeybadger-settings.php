@@ -221,7 +221,7 @@ class WP_Honeybadger_Settings {
 
     private function logo() {
         ?>
-        <svg class="honeybadger-logo" height="40" viewBox="0 0 190 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+        <svg class="honeybadger-logo" height="40" viewBox="0 0 190 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="position: absolute; top: 10px; right: 10px; fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
         <style>
             #logoBolt {
                 fill:  url(#_Linear1);
