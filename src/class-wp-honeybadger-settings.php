@@ -11,84 +11,84 @@ class WP_Honeybadger_Settings {
             'Honeybadger Settings',
             'Honeybadger',
             'manage_options',
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             [$this, 'options_page']
         );
     }
 
     public function settings_init() {
-        register_setting('wp_honeybadger', 'wp_honeybadger_settings', [
+        register_setting('honeybadger-application-monitoring', 'wp_honeybadger_settings', [
             'sanitize_callback' => [$this, 'sanitize_settings']
         ]);
 
         add_settings_section(
             'wp_honeybadger_section',
-            __('Honeybadger Settings', 'wp_honeybadger'),
+            __('Honeybadger Settings', 'honeybadger-application-monitoring'),
             [$this, 'settings_section_callback'],
-            'wp_honeybadger'
+            'honeybadger-application-monitoring'
         );
 
         add_settings_field(
             'wp_honeybadger_php_enabled',
-            __('PHP error reporting enabled', 'wp_honeybadger'),
+            __('PHP error reporting enabled', 'honeybadger-application-monitoring'),
             [$this, 'php_enabled_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
 
         add_settings_field(
             'wp_honeybadger_php_api_key',
-            __('PHP API Key', 'wp_honeybadger'),
+            __('PHP API Key', 'honeybadger-application-monitoring'),
             [$this, 'php_api_key_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
 
         add_settings_field(
             'wp_honeybadger_js_enabled',
-            __('JS error reporting enabled', 'wp_honeybadger'),
+            __('JS error reporting enabled', 'honeybadger-application-monitoring'),
             [$this, 'js_enabled_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
 
         add_settings_field(
             'wp_honeybadger_js_api_key',
-            __('JS API Key', 'wp_honeybadger'),
+            __('JS API Key', 'honeybadger-application-monitoring'),
             [$this, 'js_api_key_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
 
         add_settings_field(
             'wp_honeybadger_environment_name',
-            __('Environment', 'wp_honeybadger'),
+            __('Environment', 'honeybadger-application-monitoring'),
             [$this, 'environment_name_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
 
         add_settings_field(
             'wp_honeybadger_version',
-            __('Version', 'wp_honeybadger'),
+            __('Version', 'honeybadger-application-monitoring'),
             [$this, 'version_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
 
         add_settings_field(
             'wp_honeybadger_php_send_test_notification',
-            __('Send test notification from PHP', 'wp_honeybadger'),
+            __('Send test notification from PHP', 'honeybadger-application-monitoring'),
             [$this, 'php_send_test_notification_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
 
         add_settings_field(
             'wp_honeybadger_js_send_test_notification',
-            __('Send test notification from JavaScript', 'wp_honeybadger'),
+            __('Send test notification from JavaScript', 'honeybadger-application-monitoring'),
             [$this, 'js_send_test_notification_render'],
-            'wp_honeybadger',
+            'honeybadger-application-monitoring',
             'wp_honeybadger_section'
         );
     }
@@ -122,14 +122,14 @@ class WP_Honeybadger_Settings {
     }
 
     public function sanitize_settings($settings) {
-        $settings['wp_honeybadger_php_enabled'] = $this->sanitize_bool_value($settings['wp_honeybadger_php_enabled']);
-        $settings['wp_honeybadger_js_enabled'] = $this->sanitize_bool_value($settings['wp_honeybadger_js_enabled']);
-        $settings['wp_honeybadger_php_send_test_notification'] = $this->sanitize_bool_value($settings['wp_honeybadger_php_send_test_notification']);
-        $settings['wp_honeybadger_js_send_test_notification'] = $this->sanitize_bool_value($settings['wp_honeybadger_js_send_test_notification']);
-        $settings['wp_honeybadger_php_api_key'] = $this->sanitize_php_api_key($settings['wp_honeybadger_php_api_key']);
-        $settings['wp_honeybadger_js_api_key'] = $this->sanitize_js_api_key($settings['wp_honeybadger_js_api_key']);
-        $settings['wp_honeybadger_environment_name'] = $this->sanitize_environment_name($settings['wp_honeybadger_environment_name']);
-        $settings['wp_honeybadger_version'] = $this->sanitize_version($settings['wp_honeybadger_version']);
+        $settings['wp_honeybadger_php_enabled'] = $this->sanitize_bool_value($settings['wp_honeybadger_php_enabled'] ?? 0);
+        $settings['wp_honeybadger_js_enabled'] = $this->sanitize_bool_value($settings['wp_honeybadger_js_enabled'] ?? 0);
+        $settings['wp_honeybadger_php_send_test_notification'] = $this->sanitize_bool_value($settings['wp_honeybadger_php_send_test_notification'] ?? 0);
+        $settings['wp_honeybadger_js_send_test_notification'] = $this->sanitize_bool_value($settings['wp_honeybadger_js_send_test_notification'] ?? 0);
+        $settings['wp_honeybadger_php_api_key'] = $this->sanitize_php_api_key($settings['wp_honeybadger_php_api_key'] ?? '');
+        $settings['wp_honeybadger_js_api_key'] = $this->sanitize_js_api_key($settings['wp_honeybadger_js_api_key']) ?? '';
+        $settings['wp_honeybadger_environment_name'] = $this->sanitize_environment_name($settings['wp_honeybadger_environment_name'] ?? '');
+        $settings['wp_honeybadger_version'] = $this->sanitize_version($settings['wp_honeybadger_version'] ?? '');
         return $settings;
     }
 
@@ -181,7 +181,7 @@ class WP_Honeybadger_Settings {
         <input type='checkbox' name='wp_honeybadger_settings[wp_honeybadger_php_send_test_notification]' <?php checked($options['wp_honeybadger_php_send_test_notification'] ?? 0, 1); ?> value='1'>
         <span>
             <?php
-            echo __('If this is checked, a test notification will be sent from PHP to Honeybadger when you save.', 'wp_honeybadger');
+            echo __('If this is checked, a test notification will be sent from PHP to Honeybadger when you save.', 'honeybadger-application-monitoring');
             ?>
         </span>
         <?php
@@ -193,7 +193,7 @@ class WP_Honeybadger_Settings {
         <input type='checkbox' name='wp_honeybadger_settings[wp_honeybadger_js_send_test_notification]' <?php checked($options['wp_honeybadger_js_send_test_notification'] ?? 0, 1); ?> value='1'>
         <span>
             <?php
-            echo __('If this is checked, a test notification will be sent from JavaScript to Honeybadger when you save.', 'wp_honeybadger');
+            echo __('If this is checked, a test notification will be sent from JavaScript to Honeybadger when you save.', 'honeybadger-application-monitoring');
             ?>
         </span>
         <?php
@@ -201,18 +201,18 @@ class WP_Honeybadger_Settings {
 
     public function settings_section_callback() {
         $this->logo();
-        echo __('<br />', 'wp_honeybadger');
-        echo __('Configure your Honeybadger settings below.', 'wp_honeybadger');
-        echo __('<br />', 'wp_honeybadger');
-        echo __('For optimum experience, it is recommended to setup two Honeybadger projects, one for PHP and another for JavaScript.', 'wp_honeybadger');
+        echo __('<br />', 'honeybadger-application-monitoring');
+        echo __('Configure your Honeybadger settings below.', 'honeybadger-application-monitoring');
+        echo __('<br />', 'honeybadger-application-monitoring');
+        echo __('For optimum experience, it is recommended to setup two Honeybadger projects, one for PHP and another for JavaScript.', 'honeybadger-application-monitoring');
     }
 
     public function options_page() {
         ?>
         <form action='options.php' method='post'>
             <?php
-            settings_fields('wp_honeybadger');
-            do_settings_sections('wp_honeybadger');
+            settings_fields('honeybadger-application-monitoring');
+            do_settings_sections('honeybadger-application-monitoring');
             submit_button();
             ?>
         </form>

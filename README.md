@@ -4,57 +4,21 @@ A WordPress plugin for error tracking with [Honeybadger](https://www.honeybadger
 
 ## Requirements
 
-- PHP 7.2 or higher
-- WordPress 5.0 or higher
+- PHP 7.3 or higher
+- WordPress 5.3 or higher
 - Honeybadger account and API key
 
 ## Installation
 
-1. Download the plugin
-2. Upload it to your WordPress plugins directory
-3. Run `composer install` in the plugin directory
-4. Activate the plugin through the WordPress admin interface
+1. Install the plugin from the WordPress Plugin Directory, or upload the plugin files to the `/wp-content/plugins/honeybadger-application-monitoring` directory.
+2. Activate the plugin through the 'Plugins' screen in WordPress.
 
 ## Configuration
 
-### PHP Error Tracking
-
-Add this to your `wp-config.php`:
-
-```php
-// Required - Your Honeybadger API key
-define('WP_HONEYBADGER_API_KEY', 'your-api-key-here');
-
-// Optional - Environment name (defaults to WP environment type)
-define('WP_HONEYBADGER_ENV', 'production');
-
-// Optional - Application version
-define('WP_HONEYBADGER_VERSION', 'v1.0.0');
-
-// Optional - Send user information (default: false)
-define('WP_HONEYBADGER_CONTEXT_CAPTURE_USER', true);
-
-// Optional - Send a test notification from the PHP integration (default: false)
-define('WP_HONEYBADGER_PHP_TEST_NOTIFICATION', false);
-```
-
-### JavaScript Error Tracking
-
-Add this to your `wp-config.php`:
-
-```php
-// Required - Your Honeybadger JavaScript API key
-define('WP_HONEYBADGER_JS_API_KEY', 'your-js-api-key-here');
-
-// Optional - Enable/disable JavaScript tracking in admin area (default: true)
-define('WP_HONEYBADGER_ADMIN_JS_ENABLED', true);
-
-// Optional - Enable/disable JavaScript tracking on login page (default: true)
-define('WP_HONEYBADGER_LOGIN_JS_ENABLED', true);
-
-// Optional - Send a test notification from the JS integration (default: false)
-define('WP_HONEYBADGER_JS_TEST_NOTIFICATION', false);
-```
+1. Use the Settings->Honeybadger screen to configure the plugin.
+2. Ensure you have a Honeybadger account and obtain your API key(s). It is recommended that you have 2 separate projects, one for PHP and another for JavaScript error monitoring.
+3. Enter your Honeybadger API key(s) in the plugin settings to start monitoring errors. Ensure that "PHP error reporting enabled" option is checked to enable automatic error reporting for the PHP code. Same goes for the "JS error reporting enabled" option.
+4. Optionally, you can check the "Send test notification" options to test the integration upon clicking save. Note: You should uncheck these options (make sure to click Save) after you've verified that error reporting works.
 
 ## Features
 

@@ -1,22 +1,33 @@
 <?php
 /**
- * Plugin Name: WordPress Honeybadger
- * Plugin URI: https://github.com/honeybadger-io/honeybadger-wordpress
- * Description: Honeybadger error (PHP and JavaScript) reporting for WordPress.
- * Tags: honeybadger, error monitoring, exception tracking, error tracking, bug tracking, error reporting, exception reporting, bug reporting
- * Version: 0.0.1
- * Author: Honeybadger
- * Author URI: https://www.honeybadger.io
- * License: MIT
- * License URI: https://github.com/honeybadger-io/honeybadger-wordpress/LICENSE.md
+ *  Honeybadger Application Monitoring
+ *
+ * @package           honeybadger-wordpress
+ * @author            Honeybadger
+ * @copyright         2025 Honeybadger Industries LLC
+ * @license           GPL-2.0-or-later
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Honeybadger Application Monitoring
+ * Plugin URI:        https://github.com/honeybadger-io/honeybadger-wordpress
+ * Description:       Honeybadger error (PHP and JavaScript) reporting for WordPress.
+ * Tags:              honeybadger, error monitoring, exception tracking, error tracking, bug tracking, error reporting, exception reporting, bug reporting
+ * Version:           0.1.0
+ * Requires at least: 5.3
+ * Requires PHP:      7.3
+ * Author:            Honeybadger Industries LLC
+ * Author URI:        https://www.honeybadger.io
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       honeybadger-application-monitoring
  */
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WP_HONEYBADGER_VERSION', '1.0.0');
-define('WP_HONEYBADGER_PHP_MIN', '7.2.0');
+define('WP_HONEYBADGER_VERSION', '0.1.0');
+define('WP_HONEYBADGER_PHP_MIN', '7.3.0');
 define('WP_HONEYBADGER_PLUGIN_FILE', __FILE__);
 define('WP_HONEYBADGER_PLUGIN_DIR', dirname(__FILE__));
 
@@ -52,3 +63,10 @@ add_action('plugins_loaded', function () {
     $instance = new WP_Honeybadger();
     $instance->boot();
 });
+
+// Register uninstall hook
+function wp_honeybadger_uninstall() {
+    delete_option('wp_honeybadger_settings');
+}
+
+register_uninstall_hook(__FILE__, 'wp_honeybadger_uninstall');

@@ -60,7 +60,12 @@ class WP_Honeybadger {
 
         $config = array_merge($this->config->all(), [
             'api_key' => $this->php_api_key,
-            'report_data' => $this->php_reporting_enabled
+            'report_data' => $this->php_reporting_enabled,
+            'notifier' => [
+                'name' => 'honeybadger-wordpress',
+                'url' => 'https://github.com/honeybadger-io/honeybadger-wordpress',
+                'version' => WP_HONEYBADGER_VERSION,
+            ],
         ]);
         $this->client = Honeybadger\Honeybadger::new($config);
 
@@ -84,7 +89,7 @@ class WP_Honeybadger {
         });
 
         if ($this->php_send_test_notification) {
-            $this->client->notify(new Exception('Test error from WordPress Honeybadger plugin.'));
+            $this->client->notify(new Exception('Test PHP error from WordPress Honeybadger plugin.'));
         }
     }
 
@@ -122,11 +127,17 @@ class WP_Honeybadger {
                 environment: "%s",
                 revision: "%s",
                 reportData: %s,
-            });',
+            });
+            Honeybadger.setNotifier({
+                name: "honeybadger-wordpress",
+                url: "https://github.com/honeybadger-io/honeybadger-wordpress",
+                version: "%s"
+            })',
             esc_js($this->js_api_key),
             esc_js($this->config->get('environment_name')),
             esc_js($this->config->get('version')),
-            esc_js($this->js_reporting_enabled ? 'true' : 'false')
+            esc_js($this->js_reporting_enabled ? 'true' : 'false'),
+            esc_js(WP_HONEYBADGER_VERSION)
         ));
 
         $current_user = wp_get_current_user();
@@ -142,7 +153,7 @@ class WP_Honeybadger {
         }
 
         if ($this->js_send_test_notification) {
-            wp_add_inline_script('honeybadger-js', 'Honeybadger.notify("Test error from WordPress Honeybadger plugin.");');
+            wp_add_inline_script('honeybadger-js', 'Honeybadger.notify("Test JavaScript error from WordPress Honeybadger plugin.");');
         }
     }
 
