@@ -22,12 +22,11 @@ A WordPress plugin for error tracking with [Honeybadger](https://www.honeybadger
 
 ## Features
 
-- PHP error tracking
-- JavaScript error tracking
-- Environment-specific configuration
-- User context tracking (optional)
-- Custom error type filtering
-- WordPress admin integration
+- [x] WordPress admin integration
+- [x] PHP error tracking
+- [x] JavaScript error tracking
+- [x] User context tracking
+- [ ] Custom error type filtering
 
 ## Support
 
@@ -35,4 +34,4 @@ For issues and feature requests, please [create an issue](https://github.com/hon
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GPLv2 license - see the LICENSE file for details.
