@@ -150,28 +150,28 @@ class WP_Honeybadger_Settings {
     public function php_api_key_render() {
         $options = get_option('wp_honeybadger_settings');
         ?>
-        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_php_api_key]' value='<?php echo $options['wp_honeybadger_php_api_key'] ?? ''; ?>'>
+        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_php_api_key]' value='<?php echo esc_html($options['wp_honeybadger_php_api_key'] ?? ''); ?>'>
         <?php
     }
 
     public function js_api_key_render() {
         $options = get_option('wp_honeybadger_settings');
         ?>
-        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_js_api_key]' value='<?php echo $options['wp_honeybadger_js_api_key'] ?? ''; ?>'>
+        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_js_api_key]' value='<?php echo esc_html($options['wp_honeybadger_js_api_key'] ?? ''); ?>'>
         <?php
     }
 
     public function environment_name_render() {
         $options = get_option('wp_honeybadger_settings');
         ?>
-        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_environment_name]' value='<?php echo $options['wp_honeybadger_environment_name'] ?? 'production'; ?>'>
+        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_environment_name]' value='<?php echo esc_html($options['wp_honeybadger_environment_name'] ?? 'production'); ?>'>
         <?php
     }
 
     public function version_render() {
         $options = get_option('wp_honeybadger_settings');
         ?>
-        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_version]' value='<?php echo $options['wp_honeybadger_version'] ?? ''; ?>'>
+        <input type='text' name='wp_honeybadger_settings[wp_honeybadger_version]' value='<?php echo esc_html($options['wp_honeybadger_version'] ?? ''); ?>'>
         <?php
     }
 

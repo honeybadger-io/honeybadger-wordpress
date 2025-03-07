@@ -71,8 +71,9 @@ class WP_Honeybadger {
 
         $this->client->beforeNotify(function (&$notice) {
             $noticeContext = array($notice['request']['context']);
+            $url = !empty($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : null;
             $context = [
-                'url' => $_SERVER['REQUEST_URI'] ?? null,
+                'url' => $url,
                 'version' => $this->config->get('version'),
                 'wordpress_version' => get_bloginfo('version'),
             ];
