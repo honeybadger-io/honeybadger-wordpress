@@ -13,7 +13,7 @@
  * Description:       Honeybadger error (PHP and JavaScript) reporting for WordPress.
  * Tags:              honeybadger, error monitoring, exception tracking, error tracking, bug tracking, error reporting, exception reporting, bug reporting
  * Version:           0.1.0
- * Tested up to:      6.7.2
+ * Tested up to:      6.7
  * Requires at least: 5.3
  * Requires PHP:      7.3
  * Author:            Honeybadger Industries LLC
@@ -27,22 +27,22 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WP_HONEYBADGER_VERSION', '0.1.0');
-define('WP_HONEYBADGER_PHP_MIN', '7.3.0');
-define('WP_HONEYBADGER_PLUGIN_FILE', __FILE__);
-define('WP_HONEYBADGER_PLUGIN_DIR', dirname(__FILE__));
+define('HONEYBADGER_APP_MONITORING_VERSION', '0.1.0');
+define('HONEYBADGER_APP_MONITORING_PHP_MIN', '7.3.0');
+define('HONEYBADGER_APP_MONITORING_PLUGIN_FILE', __FILE__);
+define('HONEYBADGER_APP_MONITORING_PLUGIN_DIR', dirname(__FILE__));
 
 // Check PHP version requirement
-if (version_compare(PHP_VERSION, WP_HONEYBADGER_PHP_MIN, '<')) {
-    function wp_honeybadger_php_version_notice() {
+if (version_compare(PHP_VERSION, HONEYBADGER_APP_MONITORING_PHP_MIN, '<')) {
+    function honeybadger_app_monitoring_php_version_notice() {
         $message = sprintf(
             'WordPress Honeybadger requires PHP version %s or higher. Your current PHP version is %s.',
-            WP_HONEYBADGER_PHP_MIN,
+            HONEYBADGER_APP_MONITORING_PHP_MIN,
             PHP_VERSION
         );
         echo '<div class="notice notice-error"><p>' . esc_html($message) . '</p></div>';
     }
-    add_action('admin_notices', 'wp_honeybadger_php_version_notice');
+    add_action('admin_notices', 'honeybadger_app_monitoring_php_version_notice');
     return;
 }
 
@@ -52,22 +52,18 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 
 // Initialize the plugin
-if (!class_exists('WP_Honeybadger_Settings')) {
-    require_once __DIR__ . '/src/class-wp-honeybadger-settings.php';
-}
-if (!class_exists('WP_Honeybadger')) {
-    require_once __DIR__ . '/src/class-wp-honeybadger.php';
-}
+require_once __DIR__ . '/src/honeybadger-application-monitoring-settings.php';
+require_once __DIR__ . '/src/honeybadger-application-monitoring.php';
 
 // Boot the plugin
 add_action('plugins_loaded', function () {
-    $instance = new WP_Honeybadger();
+    $instance = new HoneybadgerApplicationMonitoring();
     $instance->boot();
 });
 
 // Register uninstall hook
-function wp_honeybadger_uninstall() {
-    delete_option('wp_honeybadger_settings');
+function honeybadger_app_monitoring_uninstall() {
+    delete_option('honeybadger_app_monitoring_settings');
 }
 
-register_uninstall_hook(__FILE__, 'wp_honeybadger_uninstall');
+register_uninstall_hook(__FILE__, 'honeybadger_app_monitoring_uninstall');
