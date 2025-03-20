@@ -206,9 +206,9 @@ class HoneybadgerApplicationMonitoringSettings {
 
     public function settings_section_callback() {
         $this->logo();
-        echo __(wp_kses_post('<br />'), 'honeybadger-application-monitoring');
+        echo wp_kses('<br />', array('br' => array()));
         echo esc_html__('Configure your Honeybadger settings below.', 'honeybadger-application-monitoring');
-        echo __(wp_kses_post('<br />'), 'honeybadger-application-monitoring');
+        echo wp_kses('<br />', array('br' => array()));
         echo esc_html__('For optimum experience, it is recommended to setup two Honeybadger projects, one for PHP and another for JavaScript.', 'honeybadger-application-monitoring');
     }
 

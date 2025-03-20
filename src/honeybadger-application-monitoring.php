@@ -71,7 +71,7 @@ class HoneybadgerApplicationMonitoring {
 
         $this->client->beforeNotify(function (&$notice) {
             $noticeContext = array($notice['request']['context']);
-            $url = !empty($_SERVER['REQUEST_URI']) ? sanitize_url($_SERVER['REQUEST_URI']) : null;
+            $url = !empty($_SERVER['REQUEST_URI']) ? sanitize_url(wp_unslash($_SERVER['REQUEST_URI'])) : null;
             $context = [
                 'url' => $url,
                 'version' => $this->config->get('version'),
