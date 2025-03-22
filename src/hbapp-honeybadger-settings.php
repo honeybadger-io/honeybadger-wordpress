@@ -13,8 +13,8 @@ class HBAPP_HoneybadgerSettings {
 
     public function add_admin_menu() {
         add_options_page(
-            'Honeybadger Settings',
-            'Honeybadger',
+            __('Honeybadger Settings', 'honeybadger-application-monitoring'),
+            __('Honeybadger', 'honeybadger-application-monitoring'),
             'manage_options',
             'honeybadger-application-monitoring',
             [$this, 'options_page']
