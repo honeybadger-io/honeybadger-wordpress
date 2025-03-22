@@ -1,6 +1,6 @@
 <?php
 
-class HoneybadgerApplicationMonitoringSettings {
+class HBAPP_HoneybadgerSettings {
     public function __construct() {
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_init', [$this, 'settings_init']);
@@ -8,7 +8,7 @@ class HoneybadgerApplicationMonitoringSettings {
     }
 
     public function enqueue_scripts() {
-        wp_enqueue_style('honeybadger-css', plugin_dir_url(__FILE__) . 'css/settings-style.css', array(), HONEYBADGER_APP_MONITORING_VERSION);
+        wp_enqueue_style('hbapp_honeybadger_css', plugin_dir_url(__FILE__) . 'css/settings-style.css', array(), HBAPP_HONEYBADGER_VERSION);
     }
 
     public function add_admin_menu() {
@@ -22,79 +22,79 @@ class HoneybadgerApplicationMonitoringSettings {
     }
 
     public function settings_init() {
-        register_setting('honeybadger-application-monitoring', 'honeybadger_app_monitoring_settings', [
+        register_setting('honeybadger-application-monitoring', 'hbapp_honeybadger_settings', [
             'sanitize_callback' => [$this, 'sanitize_settings']
         ]);
 
         add_settings_section(
-            'honeybadger_app_monitoring_section',
+            'hbapp_honeybadger_settings_section',
             __('Honeybadger Settings', 'honeybadger-application-monitoring'),
             [$this, 'settings_section_callback'],
             'honeybadger-application-monitoring'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_php_enabled',
+            'hbapp_honeybadger_php_enabled',
             __('PHP error reporting enabled', 'honeybadger-application-monitoring'),
             [$this, 'php_enabled_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_php_api_key',
+            'hbapp_honeybadger_php_api_key',
             __('PHP API Key', 'honeybadger-application-monitoring'),
             [$this, 'php_api_key_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_js_enabled',
+            'hbapp_honeybadger_js_enabled',
             __('JS error reporting enabled', 'honeybadger-application-monitoring'),
             [$this, 'js_enabled_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_js_api_key',
+            'hbapp_honeybadger_js_api_key',
             __('JS API Key', 'honeybadger-application-monitoring'),
             [$this, 'js_api_key_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_environment_name',
+            'hbapp_honeybadger_environment_name',
             __('Environment', 'honeybadger-application-monitoring'),
             [$this, 'environment_name_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_version',
+            'hbapp_honeybadger_version',
             __('Version', 'honeybadger-application-monitoring'),
             [$this, 'version_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_php_send_test_notification',
+            'hbapp_honeybadger_php_send_test_notification',
             __('Send test notification from PHP', 'honeybadger-application-monitoring'),
             [$this, 'php_send_test_notification_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
 
         add_settings_field(
-            'honeybadger_app_monitoring_js_send_test_notification',
+            'hbapp_honeybadger_js_send_test_notification',
             __('Send test notification from JavaScript', 'honeybadger-application-monitoring'),
             [$this, 'js_send_test_notification_render'],
             'honeybadger-application-monitoring',
-            'honeybadger_app_monitoring_section'
+            'hbapp_honeybadger_settings_section'
         );
     }
 
@@ -104,7 +104,7 @@ class HoneybadgerApplicationMonitoringSettings {
 
     public function sanitize_js_api_key($input) {
         if (empty($input) || !is_string($input)) {
-            add_settings_error('honeybadger_app_monitoring_settings', 'invalid-js-api-key', 'Invalid JS API Key');
+            add_settings_error('hbapp_honeybadger_settings', 'invalid-js-api-key', 'Invalid JS API Key');
             return '';
         }
         return sanitize_text_field($input);
@@ -112,7 +112,7 @@ class HoneybadgerApplicationMonitoringSettings {
 
     public function sanitize_php_api_key($input) {
         if (empty($input) || !is_string($input)) {
-            add_settings_error('honeybadger_app_monitoring_settings', 'invalid-php-api-key', 'Invalid PHP API Key');
+            add_settings_error('hbapp_honeybadger_settings', 'invalid-php-api-key', 'Invalid PHP API Key');
             return '';
         }
         return sanitize_text_field($input);
@@ -127,63 +127,63 @@ class HoneybadgerApplicationMonitoringSettings {
     }
 
     public function sanitize_settings($settings) {
-        $settings['honeybadger_app_monitoring_php_enabled'] = $this->sanitize_bool_value($settings['honeybadger_app_monitoring_php_enabled'] ?? 0);
-        $settings['honeybadger_app_monitoring_js_enabled'] = $this->sanitize_bool_value($settings['honeybadger_app_monitoring_js_enabled'] ?? 0);
-        $settings['honeybadger_app_monitoring_php_send_test_notification'] = $this->sanitize_bool_value($settings['honeybadger_app_monitoring_php_send_test_notification'] ?? 0);
-        $settings['honeybadger_app_monitoring_js_send_test_notification'] = $this->sanitize_bool_value($settings['honeybadger_app_monitoring_js_send_test_notification'] ?? 0);
-        $settings['honeybadger_app_monitoring_php_api_key'] = $this->sanitize_php_api_key($settings['honeybadger_app_monitoring_php_api_key'] ?? '');
-        $settings['honeybadger_app_monitoring_js_api_key'] = $this->sanitize_js_api_key($settings['honeybadger_app_monitoring_js_api_key']) ?? '';
-        $settings['honeybadger_app_monitoring_environment_name'] = $this->sanitize_environment_name($settings['honeybadger_app_monitoring_environment_name'] ?? '');
-        $settings['honeybadger_app_monitoring_version'] = $this->sanitize_version($settings['honeybadger_app_monitoring_version'] ?? '');
+        $settings['hbapp_honeybadger_php_enabled'] = $this->sanitize_bool_value($settings['hbapp_honeybadger_php_enabled'] ?? 0);
+        $settings['hbapp_honeybadger_js_enabled'] = $this->sanitize_bool_value($settings['hbapp_honeybadger_js_enabled'] ?? 0);
+        $settings['hbapp_honeybadger_php_send_test_notification'] = $this->sanitize_bool_value($settings['hbapp_honeybadger_php_send_test_notification'] ?? 0);
+        $settings['hbapp_honeybadger_js_send_test_notification'] = $this->sanitize_bool_value($settings['hbapp_honeybadger_js_send_test_notification'] ?? 0);
+        $settings['hbapp_honeybadger_php_api_key'] = $this->sanitize_php_api_key($settings['hbapp_honeybadger_php_api_key'] ?? '');
+        $settings['hbapp_honeybadger_js_api_key'] = $this->sanitize_js_api_key($settings['hbapp_honeybadger_js_api_key']) ?? '';
+        $settings['hbapp_honeybadger_environment_name'] = $this->sanitize_environment_name($settings['hbapp_honeybadger_environment_name'] ?? '');
+        $settings['hbapp_honeybadger_version'] = $this->sanitize_version($settings['hbapp_honeybadger_version'] ?? '');
         return $settings;
     }
 
     public function js_enabled_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='checkbox' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_js_enabled]' <?php checked($options['honeybadger_app_monitoring_js_enabled'] ?? 1, 1); ?> value='1'>
+        <input type='checkbox' name='hbapp_honeybadger_settings[hbapp_honeybadger_js_enabled]' <?php checked($options['hbapp_honeybadger_js_enabled'] ?? 1, 1); ?> value='1'>
         <?php
     }
 
     public function php_enabled_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='checkbox' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_php_enabled]' <?php checked($options['honeybadger_app_monitoring_php_enabled'] ?? 1, 1); ?> value='1'>
+        <input type='checkbox' name='hbapp_honeybadger_settings[hbapp_honeybadger_php_enabled]' <?php checked($options['hbapp_honeybadger_php_enabled'] ?? 1, 1); ?> value='1'>
         <?php
     }
 
     public function php_api_key_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='text' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_php_api_key]' value='<?php echo esc_html($options['honeybadger_app_monitoring_php_api_key'] ?? ''); ?>'>
+        <input type='text' name='hbapp_honeybadger_settings[hbapp_honeybadger_php_api_key]' value='<?php echo esc_html($options['hbapp_honeybadger_php_api_key'] ?? ''); ?>'>
         <?php
     }
 
     public function js_api_key_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='text' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_js_api_key]' value='<?php echo esc_html($options['honeybadger_app_monitoring_js_api_key'] ?? ''); ?>'>
+        <input type='text' name='hbapp_honeybadger_settings[hbapp_honeybadger_js_api_key]' value='<?php echo esc_html($options['hbapp_honeybadger_js_api_key'] ?? ''); ?>'>
         <?php
     }
 
     public function environment_name_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='text' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_environment_name]' value='<?php echo esc_html($options['honeybadger_app_monitoring_environment_name'] ?? 'production'); ?>'>
+        <input type='text' name='hbapp_honeybadger_settings[hbapp_honeybadger_environment_name]' value='<?php echo esc_html($options['hbapp_honeybadger_environment_name'] ?? 'production'); ?>'>
         <?php
     }
 
     public function version_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='text' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_version]' value='<?php echo esc_html($options['honeybadger_app_monitoring_version'] ?? ''); ?>'>
+        <input type='text' name='hbapp_honeybadger_settings[hbapp_honeybadger_version]' value='<?php echo esc_html($options['hbapp_honeybadger_version'] ?? ''); ?>'>
         <?php
     }
 
     public function php_send_test_notification_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='checkbox' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_php_send_test_notification]' <?php checked($options['honeybadger_app_monitoring_php_send_test_notification'] ?? 0, 1); ?> value='1'>
+        <input type='checkbox' name='hbapp_honeybadger_settings[hbapp_honeybadger_php_send_test_notification]' <?php checked($options['hbapp_honeybadger_php_send_test_notification'] ?? 0, 1); ?> value='1'>
         <span>
             <?php
             echo esc_html__('If this is checked, a test notification will be sent from PHP to Honeybadger when you save.', 'honeybadger-application-monitoring');
@@ -193,9 +193,9 @@ class HoneybadgerApplicationMonitoringSettings {
     }
 
     public function js_send_test_notification_render() {
-        $options = get_option('honeybadger_app_monitoring_settings');
+        $options = get_option('hbapp_honeybadger_settings');
         ?>
-        <input type='checkbox' name='honeybadger_app_monitoring_settings[honeybadger_app_monitoring_js_send_test_notification]' <?php checked($options['honeybadger_app_monitoring_js_send_test_notification'] ?? 0, 1); ?> value='1'>
+        <input type='checkbox' name='hbapp_honeybadger_settings[hbapp_honeybadger_js_send_test_notification]' <?php checked($options['hbapp_honeybadger_js_send_test_notification'] ?? 0, 1); ?> value='1'>
         <span>
             <?php
             echo esc_html__('If this is checked, a test notification will be sent from JavaScript to Honeybadger when you save.', 'honeybadger-application-monitoring');

@@ -22,13 +22,12 @@ Honeybadger Application Monitoring for WordPress provides comprehensive error mo
 6. Optionally, you can check the "Send test notification" options to test the integration upon clicking save. Note: You should uncheck these options (make sure to click Save) after you've verified that error reporting works.
 
 == Honeybadger PHP Error Notifier ==
-The PHP error notifier is based on the [Honeybadger PHP Open Source GitHub Repository](https://github.com/honeybadger-io/honeybadger-php).
+The PHP error notifier is based on the open source [honeybadger-io/honeybadger-php](https://packagist.org/packages/honeybadger-io/honeybadger-php) package. The source code is available [here](https://github.com/honeybadger-io/honeybadger-php).
 
 == Honeybadger JavaScript Error Notifier and Source Code ==
-To report JavaScript errors, the plugin ships with a minified version of the JavaScript package, `honeybadger.vX.Y.min.js`. You can find the source code at [Honeybadger's JavaScript open source GitHub repository](https://github.com/honeybadger-io/honeybadger-js).
-The repository is a monorepo, which provides plugins for various frameworks and libraries.
-This plugin uses the `@honeybadger-io/js` package, found under [packages/js](https://github.com/honeybadger-io/honeybadger-js/tree/master/packages/js), which is an isomorphic library supporting both server and browser JavaScript applications.
-More information on how the package is built is found in the README file of the repository, under the [Bundling and types](https://github.com/honeybadger-io/honeybadger-js/tree/master/packages/js#bundling-and-types) section.
+To report JavaScript errors, the plugin ships with a minified version of the open source [@honeybadger-io/js](https://www.npmjs.com/package/@honeybadger-io/js) package, `honeybadger.vX.Y.min.js`. The source code is available [here](https://github.com/honeybadger-io/honeybadger-js).
+The repository is a monorepo, which provides plugins for various frameworks and libraries. The source code for `@honeybadger-io/js` is in the folder [packages/js](https://github.com/honeybadger-io/honeybadger-js/tree/master/packages/js), which is an isomorphic library supporting both server and browser JavaScript applications.
+More information on how the package is built can be found in the README file of the repository, under the [Bundling and types](https://github.com/honeybadger-io/honeybadger-js/tree/master/packages/js#bundling-and-types) section.
 
 == Frequently Asked Questions ==
 = I have installed the plugin but I can't see any notifications being reported. =

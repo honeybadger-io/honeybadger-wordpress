@@ -1,6 +1,6 @@
 <?php
 
-class HoneybadgerApplicationMonitoring {
+class HBAPP_Honeybadger {
     /**
      * @var Honeybadger\Honeybadger
      */
@@ -64,16 +64,24 @@ class HoneybadgerApplicationMonitoring {
             'notifier' => [
                 'name' => 'honeybadger-wordpress',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-wordpress',
-                'version' => HONEYBADGER_APP_MONITORING_VERSION,
+                'version' => HBAPP_HONEYBADGER_VERSION,
             ],
         ]);
         $this->client = Honeybadger\Honeybadger::new($config);
 
         $this->client->beforeNotify(function (&$notice) {
-            $noticeContext = array($notice['request']['context']);
-            $url = !empty($_SERVER['REQUEST_URI']) ? sanitize_url(wp_unslash($_SERVER['REQUEST_URI'])) : null;
+
+            $noticeContext = $notice['request']['context'];
+            if ($noticeContext instanceof stdClass) {
+                // if context is stdClass, we consider it as empty
+                $noticeContext = [];
+            }
+            else if (!is_array($noticeContext)) {
+                $noticeContext = (array) $noticeContext;
+            }
+
             $context = [
-                'url' => $url,
+                'url' => $this->get_request_url(),
                 'version' => $this->config->get('version'),
                 'wordpress_version' => get_bloginfo('version'),
             ];
@@ -92,6 +100,10 @@ class HoneybadgerApplicationMonitoring {
         if ($this->php_send_test_notification) {
             $this->client->notify(new Exception('Test PHP error from WordPress Honeybadger plugin.'));
         }
+    }
+
+    private function get_request_url() {
+        return !empty($_SERVER['REQUEST_URI']) ? sanitize_url(wp_unslash($_SERVER['REQUEST_URI'])) : null;
     }
 
     /**
@@ -115,14 +127,14 @@ class HoneybadgerApplicationMonitoring {
             return;
         }
 
-        wp_enqueue_script('honeybadger-js',
+        wp_enqueue_script('hbapp_honeybadger_js',
             plugins_url('/lib/honeybadger.v6.10.min.js', __FILE__),
             [],
             '6.10',
             true
         );
 
-        wp_add_inline_script('honeybadger-js', sprintf(
+        wp_add_inline_script('hbapp_honeybadger_js', sprintf(
             'Honeybadger.configure({
                 apiKey: "%s",
                 environment: "%s",
@@ -138,23 +150,29 @@ class HoneybadgerApplicationMonitoring {
             esc_js($this->config->get('environment_name')),
             esc_js($this->config->get('version')),
             esc_js($this->js_reporting_enabled ? 'true' : 'false'),
-            esc_js(HONEYBADGER_APP_MONITORING_VERSION)
+            esc_js(HBAPP_HONEYBADGER_VERSION)
         ));
 
         $current_user = wp_get_current_user();
         if ($current_user && $current_user->ID) {
-            wp_add_inline_script('honeybadger-js', sprintf(
+            wp_add_inline_script('hbapp_honeybadger_js', sprintf(
                 'Honeybadger.setContext({
                     user_id: "%s",
                     user_email: "%s",
+                    wordpress_version: "%s",
+                    version: "%s",
+                    url: "%s"
                 });',
                 esc_js($current_user->ID),
-                esc_js($current_user->user_email)
+                esc_js($current_user->user_email),
+                esc_js(get_bloginfo('version')),
+                esc_js($this->config->get('version')),
+                esc_js($this->get_request_url())
             ));
         }
 
         if ($this->js_send_test_notification) {
-            wp_add_inline_script('honeybadger-js', 'Honeybadger.notify("Test JavaScript error from WordPress Honeybadger plugin.");');
+            wp_add_inline_script('hbapp_honeybadger_js', 'Honeybadger.notify("Test JavaScript error from WordPress Honeybadger plugin.");');
         }
     }
 
@@ -178,37 +196,37 @@ class HoneybadgerApplicationMonitoring {
      */
     private function init_settings() {
         // setup settings page
-        new HoneybadgerApplicationMonitoringSettings();
+        new HBAPP_HoneybadgerSettings();
 
-        $wpOptions = get_option('honeybadger_app_monitoring_settings', [
-            'honeybadger_app_monitoring_php_enabled' => 1,
-            'honeybadger_app_monitoring_php_api_key' => '',
-            'honeybadger_app_monitoring_php_send_test_notification' => 0,
-            'honeybadger_app_monitoring_endpoint' => '',
-            'honeybadger_app_monitoring_environment_name' => '',
-            'honeybadger_app_monitoring_version' => '',
-            'honeybadger_app_monitoring_js_enabled' => 1,
-            'honeybadger_app_monitoring_js_api_key' => '',
-            'honeybadger_app_monitoring_js_send_test_notification' => 0,
+        $wpOptions = get_option('hbapp_honeybadger_settings', [
+            'hbapp_honeybadger_php_enabled' => 1,
+            'hbapp_honeybadger_php_api_key' => '',
+            'hbapp_honeybadger_php_send_test_notification' => 0,
+            'hbapp_honeybadger_endpoint' => '',
+            'hbapp_honeybadger_environment_name' => '',
+            'hbapp_honeybadger_version' => '',
+            'hbapp_honeybadger_js_enabled' => 1,
+            'hbapp_honeybadger_js_api_key' => '',
+            'hbapp_honeybadger_js_send_test_notification' => 0,
         ]);
 
-        $this->php_reporting_enabled = $wpOptions['honeybadger_app_monitoring_php_enabled'];
-        $this->php_api_key = $wpOptions['honeybadger_app_monitoring_php_api_key'];
-        $this->php_send_test_notification = $wpOptions['honeybadger_app_monitoring_php_send_test_notification'];
+        $this->php_reporting_enabled = $wpOptions['hbapp_honeybadger_php_enabled'];
+        $this->php_api_key = $wpOptions['hbapp_honeybadger_php_api_key'];
+        $this->php_send_test_notification = $wpOptions['hbapp_honeybadger_php_send_test_notification'];
 
-        $this->js_reporting_enabled = $wpOptions['honeybadger_app_monitoring_js_enabled'];
-        $this->js_api_key = $wpOptions['honeybadger_app_monitoring_js_api_key'];
-        $this->js_send_test_notification = $wpOptions['honeybadger_app_monitoring_js_send_test_notification'];
+        $this->js_reporting_enabled = $wpOptions['hbapp_honeybadger_js_enabled'];
+        $this->js_api_key = $wpOptions['hbapp_honeybadger_js_api_key'];
+        $this->js_send_test_notification = $wpOptions['hbapp_honeybadger_js_send_test_notification'];
 
         $hbConfigFromWp = [];
-        if (!empty($wpOptions['honeybadger_app_monitoring_endpoint'])) {
-            $hbConfigFromWp['endpoint'] = $wpOptions['honeybadger_app_monitoring_endpoint'];
+        if (!empty($wpOptions['hbapp_honeybadger_endpoint'])) {
+            $hbConfigFromWp['endpoint'] = $wpOptions['hbapp_honeybadger_endpoint'];
         }
-        if (!empty($wpOptions['honeybadger_app_monitoring_environment_name'])) {
-            $hbConfigFromWp['environment_name'] = $wpOptions['honeybadger_app_monitoring_environment_name'];
+        if (!empty($wpOptions['hbapp_honeybadger_environment_name'])) {
+            $hbConfigFromWp['environment_name'] = $wpOptions['hbapp_honeybadger_environment_name'];
         }
-        if (!empty($wpOptions['honeybadger_app_monitoring_version'])) {
-            $hbConfigFromWp['version'] = $wpOptions['honeybadger_app_monitoring_version'];
+        if (!empty($wpOptions['hbapp_honeybadger_version'])) {
+            $hbConfigFromWp['version'] = $wpOptions['hbapp_honeybadger_version'];
         }
 
         $this->config = new \Honeybadger\Config($hbConfigFromWp);
