@@ -1,0 +1,8 @@
+/.idea
+/.git
+/.github
+/.wordpress-org
+.gitignore
+.distignore
+.gitattributes
+readme.md

@@ -79,3 +79,5 @@ fabric.properties
 
 vendor/
 
+.DS_Store
+

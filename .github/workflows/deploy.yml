@@ -1,0 +1,37 @@
+name: Deploy to WordPress Plugin Repository
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: php-actions/composer@master
+        with:
+          php_version: '8.4'
+
+      - name: Deploy
+        uses: 10up/action-wordpress-plugin-deploy@2.3.0
+        with:
+          generate-zip: true
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SLUG: honeybadger-application-monitoring
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          files: ${{github.workspace}}/${{ github.event.repository.name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -28,6 +28,14 @@ A WordPress plugin for error tracking with [Honeybadger](https://www.honeybadger
 - [x] User context tracking
 - [ ] Custom error type filtering
 
+
+## Releasing
+
+1. Update the version number in `honeybadger-application-monitoring.php`.
+2. Update the `readme.txt` file with the new version number.
+3. Push a new tag to the repository with the new version number.
+4. This should trigger the GitHub Actions workflow to build the plugin and deploy it to the WordPress Plugin Directory.
+
 ## Support
 
 For issues and feature requests, please [create an issue](https://github.com/honeybadger-io/honeybadger-wordpress/issues) on GitHub.
