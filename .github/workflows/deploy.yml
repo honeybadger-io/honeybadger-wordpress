@@ -21,6 +21,7 @@ jobs:
           php_version: '8.4'
 
       - name: Deploy
+        id: deploy
         uses: 10up/action-wordpress-plugin-deploy@2.3.0
         with:
           generate-zip: true
@@ -32,6 +33,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2.2.1
         with:
-          files: ${{github.workspace}}/${{ github.event.repository.name }}.zip
+          files: ${{ steps.deploy.outputs.zip-path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

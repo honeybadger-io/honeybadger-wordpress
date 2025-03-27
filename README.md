@@ -34,7 +34,7 @@ A WordPress plugin for error tracking with [Honeybadger](https://www.honeybadger
 1. Update the version number in `honeybadger-application-monitoring.php`.
 2. Update the `readme.txt` file with the new version number.
 3. Push a new tag to the repository with the new version number.
-4. This should trigger the GitHub Actions workflow to build the plugin and deploy it to the WordPress Plugin Directory.
+4. The previous step should trigger the GitHub Actions workflow to build the plugin and deploy it to the WordPress Plugin Directory.
 
 ## Support
 
