@@ -12,8 +12,8 @@
  * Plugin URI:        https://github.com/honeybadger-io/honeybadger-wordpress
  * Description:       Honeybadger error (PHP and JavaScript) reporting for WordPress.
  * Tags:              honeybadger, error monitoring, exception tracking, error tracking, bug tracking, error reporting, exception reporting, bug reporting
- * Version:           0.1.0
- * Tested up to:      6.7
+ * Version:           0.1.1
+ * Tested up to:      6.8
  * Requires at least: 5.3
  * Requires PHP:      7.3
  * Author:            Honeybadger Industries LLC
