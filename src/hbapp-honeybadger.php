@@ -219,13 +219,13 @@ class HBAPP_Honeybadger {
             'hbapp_honeybadger_js_send_test_notification' => 0,
         ]);
 
-        $this->php_reporting_enabled = $wpOptions['hbapp_honeybadger_php_enabled'] == 1;
+        $this->php_reporting_enabled = $wpOptions['hbapp_honeybadger_php_enabled'] === 1;
         $this->php_api_key = $wpOptions['hbapp_honeybadger_php_api_key'];
-        $this->php_send_test_notification = $wpOptions['hbapp_honeybadger_php_send_test_notification'] == 1;
+        $this->php_send_test_notification = $wpOptions['hbapp_honeybadger_php_send_test_notification'] === 1;
 
-        $this->js_reporting_enabled = $wpOptions['hbapp_honeybadger_js_enabled'] == 1;
+        $this->js_reporting_enabled = $wpOptions['hbapp_honeybadger_js_enabled'] === 1;
         $this->js_api_key = $wpOptions['hbapp_honeybadger_js_api_key'];
-        $this->js_send_test_notification = $wpOptions['hbapp_honeybadger_js_send_test_notification'] == 1;
+        $this->js_send_test_notification = $wpOptions['hbapp_honeybadger_js_send_test_notification'] === 1;
 
         $hbConfigFromWp = [];
         if (!empty($wpOptions['hbapp_honeybadger_endpoint'])) {
@@ -247,7 +247,7 @@ class HBAPP_Honeybadger {
      * @param array $settings Associative array of settings to update
      * @return bool True if settings were updated successfully, false otherwise
      */
-    public function update_settings($settings) {
+    private function update_settings($settings) {
         if (!is_array($settings) || empty($settings)) {
             return false;
         }
