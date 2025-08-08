@@ -1,8 +1,8 @@
 === Honeybadger Application Monitoring ===
 Contributors: pangratioscosma
 Tags: honeybadger, error monitoring, error reporting, exception reporting, bug reporting
-Stable tag: 0.1.0
-Tested up to: 6.7
+Stable tag: 0.1.1
+Tested up to: 6.8
 Requires at least: 5.3
 Requires PHP: 7.3
 License: GPL v2 or later
@@ -32,9 +32,6 @@ More information on how the package is built can be found in the README file of 
 == Frequently Asked Questions ==
 = I have installed the plugin but I can't see any notifications being reported. =
 Ensure that you have entered your Honeybadger API key(s) correctly in the plugin settings. Also, make sure that the "PHP error reporting enabled" and "JS error reporting enabled" options are checked. If you are still not seeing notifications, check your Honeybadger account to ensure that the API keys are valid and that there are no issues with your Honeybadger projects.
-
-= Why am I still seeing test notifications being reported to Honeybadger? =
-If you are seeing test notifications, it is likely that the "Send test notification" options are still checked in the plugin settings. Uncheck these options and click Save to stop sending test notifications.
 
 = What is the "Version" option? =
 The "Version" option allows you to specify the version of your application that is being monitored. This can be useful for tracking errors across different versions of your application.

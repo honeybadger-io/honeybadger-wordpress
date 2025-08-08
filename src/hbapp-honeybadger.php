@@ -99,6 +99,7 @@ class HBAPP_Honeybadger {
 
         if ($this->php_send_test_notification) {
             $this->client->notify(new Exception('Test PHP error from WordPress Honeybadger plugin.'));
+            $this->update_settings(['hbapp_honeybadger_php_send_test_notification' => 0]);
         }
     }
 
@@ -173,6 +174,7 @@ class HBAPP_Honeybadger {
 
         if ($this->js_send_test_notification) {
             wp_add_inline_script('hbapp_honeybadger_js', 'Honeybadger.notify("Test JavaScript error from WordPress Honeybadger plugin.");');
+            $this->update_settings(['hbapp_honeybadger_js_send_test_notification' => 0]);
         }
     }
 
@@ -198,6 +200,13 @@ class HBAPP_Honeybadger {
         // setup settings page
         new HBAPP_HoneybadgerSettings();
 
+        $this->load_settings_from_options();
+    }
+
+    /**
+     * Load settings from WordPress Options API and initialize instance variables
+     */
+    private function load_settings_from_options() {
         $wpOptions = get_option('hbapp_honeybadger_settings', [
             'hbapp_honeybadger_php_enabled' => 1,
             'hbapp_honeybadger_php_api_key' => '',
@@ -210,13 +219,13 @@ class HBAPP_Honeybadger {
             'hbapp_honeybadger_js_send_test_notification' => 0,
         ]);
 
-        $this->php_reporting_enabled = $wpOptions['hbapp_honeybadger_php_enabled'];
+        $this->php_reporting_enabled = $wpOptions['hbapp_honeybadger_php_enabled'] === 1;
         $this->php_api_key = $wpOptions['hbapp_honeybadger_php_api_key'];
-        $this->php_send_test_notification = $wpOptions['hbapp_honeybadger_php_send_test_notification'];
+        $this->php_send_test_notification = $wpOptions['hbapp_honeybadger_php_send_test_notification'] === 1;
 
-        $this->js_reporting_enabled = $wpOptions['hbapp_honeybadger_js_enabled'];
+        $this->js_reporting_enabled = $wpOptions['hbapp_honeybadger_js_enabled'] === 1;
         $this->js_api_key = $wpOptions['hbapp_honeybadger_js_api_key'];
-        $this->js_send_test_notification = $wpOptions['hbapp_honeybadger_js_send_test_notification'];
+        $this->js_send_test_notification = $wpOptions['hbapp_honeybadger_js_send_test_notification'] === 1;
 
         $hbConfigFromWp = [];
         if (!empty($wpOptions['hbapp_honeybadger_endpoint'])) {
@@ -230,5 +239,29 @@ class HBAPP_Honeybadger {
         }
 
         $this->config = new \Honeybadger\Config($hbConfigFromWp);
+    }
+
+    /**
+     * Update specific settings in the WordPress Options API and refresh instance variables
+     *
+     * @param array $settings Associative array of settings to update
+     * @return bool True if settings were updated successfully, false otherwise
+     */
+    private function update_settings($settings) {
+        if (!is_array($settings) || empty($settings)) {
+            return false;
+        }
+
+        $wpOptions = get_option('hbapp_honeybadger_settings', []);
+        foreach ($settings as $key => $value) {
+            $wpOptions[$key] = $value;
+        }
+
+        $updated = update_option('hbapp_honeybadger_settings', $wpOptions);
+        if ($updated) {
+            $this->load_settings_from_options();
+        }
+
+        return $updated;
     }
 }
