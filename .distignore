@@ -6,3 +6,10 @@
 .distignore
 .gitattributes
 readme.md
+
+# Plugin Testing files
+tests
+.phpcs.xml.dist
+.phpunit.result.cache
+php-build.ini
+phpunit.xml.dist

@@ -28,6 +28,18 @@ A WordPress plugin for error tracking with [Honeybadger](https://www.honeybadger
 - [x] User context tracking
 - [ ] Custom error type filtering
 
+## Testing
+
+The test environment was setup using the official [WP-CLI plugin](https://github.com/wp-cli/scaffold-command#wp-scaffold-plugin-tests).
+To run the tests locally, you need to have the following installed:
+- PHP (`brew install php && brew services start php`)
+- MySQL (`brew install mysql && brew services start mysql`)
+- Subversion (`brew install svn`)
+
+Then:
+- Run `composer install`.
+- Run `bash bin/install-wp-tests.sh wordpress_test root '' localhost latest`. This will install Wordpress to a `/tmp` folder, along with a database `wordpress_test`.
+- Run `./vendor/bin/phpunit`
 
 ## Releasing
 
