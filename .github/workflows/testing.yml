@@ -28,7 +28,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          # tools: phpunit-polyfills:1.1 # may not be necessary
+          tools: phpunit-polyfills:1.1 # may not be necessary
 
       - name: Install svn
         run: sudo apt-get install subversion
