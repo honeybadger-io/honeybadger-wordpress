@@ -4,7 +4,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
 
     private $admin_user_id;
 
-    protected function setUp(): void {
+    public function setUp(): void {
         parent::setUp();
 
         // Be admin for admin area hooks and capability checks.
