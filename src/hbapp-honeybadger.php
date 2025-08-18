@@ -67,7 +67,12 @@ class HBAPP_Honeybadger {
                 'version' => HBAPP_HONEYBADGER_VERSION,
             ],
         ]);
-        $this->client = Honeybadger\Honeybadger::new($config);
+
+        // Allow tests or integrators to inject a custom Guzzle client to avoid real HTTP requests.
+        // The filter should return an instance of \GuzzleHttp\Client or null to use the default.
+        $injectedClient = apply_filters('hbapp_honeybadger_http_client', null, $config);
+
+        $this->client = Honeybadger\Honeybadger::new($config, $injectedClient);
 
         $this->client->beforeNotify(function (&$notice) {
 

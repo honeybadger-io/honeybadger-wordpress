@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('HBAPP_HONEYBADGER_VERSION', '0.1.0');
+define('HBAPP_HONEYBADGER_VERSION', '0.1.1');
 define('HBAPP_HONEYBADGER_PHP_MIN', '7.3.0');
 define('HBAPP_HONEYBADGER_PLUGIN_FILE', __FILE__);
 define('HBAPP_HONEYBADGER_PLUGIN_DIR', dirname(__FILE__));
@@ -63,7 +63,7 @@ add_action('plugins_loaded', function () {
 
 // Register uninstall hook
 function hbapp_honeybadger_uninstall() {
-    delete_option('honeybadger_app_monitoring_settings');
+    delete_option('hbapp_honeybadger_settings');
 }
 
 register_uninstall_hook(__FILE__, 'hbapp_honeybadger_uninstall');
