@@ -42,6 +42,24 @@ class HBAPP_Honeybadger {
     private $php_send_test_notification = false;
 
     /**
+     * @var bool
+     */
+    private $php_report_non_fatal = false;
+
+    /**
+     * @var array
+     */
+    private const NON_FATAL_ERRORS = [
+        'E_WARNING',
+        'E_NOTICE',
+        'E_USER_WARNING',
+        'E_USER_NOTICE',
+        'E_CORE_WARNING',
+        'E_COMPILE_WARNING',
+        'E_STRICT',
+    ];
+
+    /**
      * Boot the plugin
      */
     public function boot() {
@@ -75,6 +93,21 @@ class HBAPP_Honeybadger {
         $this->client = Honeybadger\Honeybadger::new($config, $injectedClient);
 
         $this->client->beforeNotify(function (&$notice) {
+
+            $errorClass = (string) ($notice['error']['class'] ?? '');
+
+            // Honeybadger's ErrorHandler from the PHP SDK should handle this automatically
+            // if error_reporting() is configured properly.
+            // However, if it has not been configured to silence these errors
+            // we can catch them here
+            if (!$this->php_report_non_fatal) {
+                $drop = array_map(static function ($level) {
+                    return "Error ($level)";
+                }, self::NON_FATAL_ERRORS);
+                if (in_array($errorClass, $drop, true)) {
+                    return false;
+                }
+            }
 
             $noticeContext = $notice['request']['context'];
             if ($noticeContext instanceof stdClass) {
@@ -214,6 +247,8 @@ class HBAPP_Honeybadger {
     private function load_settings_from_options() {
         $wpOptions = get_option('hbapp_honeybadger_settings', [
             'hbapp_honeybadger_php_enabled' => 1,
+            'hbapp_honeybadger_php_report_non_fatal' => 0,
+            'hbapp_honeybadger_php_capture_deprecations' => 0,
             'hbapp_honeybadger_php_api_key' => '',
             'hbapp_honeybadger_php_send_test_notification' => 0,
             'hbapp_honeybadger_endpoint' => '',
@@ -224,13 +259,14 @@ class HBAPP_Honeybadger {
             'hbapp_honeybadger_js_send_test_notification' => 0,
         ]);
 
-        $this->php_reporting_enabled = $wpOptions['hbapp_honeybadger_php_enabled'] === 1;
-        $this->php_api_key = $wpOptions['hbapp_honeybadger_php_api_key'];
-        $this->php_send_test_notification = $wpOptions['hbapp_honeybadger_php_send_test_notification'] === 1;
+        $this->php_reporting_enabled = ($wpOptions['hbapp_honeybadger_php_enabled'] ?? 1) === 1;
+        $this->php_api_key = $wpOptions['hbapp_honeybadger_php_api_key'] ?? '';
+        $this->php_send_test_notification = ($wpOptions['hbapp_honeybadger_php_send_test_notification'] ?? 0) === 1;
 
-        $this->js_reporting_enabled = $wpOptions['hbapp_honeybadger_js_enabled'] === 1;
-        $this->js_api_key = $wpOptions['hbapp_honeybadger_js_api_key'];
-        $this->js_send_test_notification = $wpOptions['hbapp_honeybadger_js_send_test_notification'] === 1;
+        $this->js_reporting_enabled = ($wpOptions['hbapp_honeybadger_js_enabled'] ?? 1) === 1;
+        $this->js_api_key = $wpOptions['hbapp_honeybadger_js_api_key'] ?? '';
+        $this->js_send_test_notification = ($wpOptions['hbapp_honeybadger_js_send_test_notification'] ?? 0) === 1;
+        $this->php_report_non_fatal = ($wpOptions['hbapp_honeybadger_php_report_non_fatal'] ?? 0) == 1;
 
         $hbConfigFromWp = [];
         if (!empty($wpOptions['hbapp_honeybadger_endpoint'])) {
@@ -242,6 +278,8 @@ class HBAPP_Honeybadger {
         if (!empty($wpOptions['hbapp_honeybadger_version'])) {
             $hbConfigFromWp['version'] = $wpOptions['hbapp_honeybadger_version'];
         }
+
+        $hbConfigFromWp['capture_deprecations'] = ($wpOptions['hbapp_honeybadger_php_capture_deprecations'] ?? 0) == 1;
 
         $this->config = new \Honeybadger\Config($hbConfigFromWp);
     }
