@@ -29,7 +29,8 @@ class Honeybadger_Init_Test extends WP_UnitTestCase {
         $this->assertTrue( defined( 'HBAPP_HONEYBADGER_PLUGIN_FILE' ), 'HBAPP_HONEYBADGER_PLUGIN_FILE should be defined.' );
         $this->assertTrue( defined( 'HBAPP_HONEYBADGER_PLUGIN_DIR' ), 'HBAPP_HONEYBADGER_PLUGIN_DIR should be defined.' );
 
-        $this->assertSame( '0.1.1', HBAPP_HONEYBADGER_VERSION );
+        $readmeVersion = $this->get_version_tag_from_readme();
+        $this->assertSame($readmeVersion, HBAPP_HONEYBADGER_VERSION, 'HBAPP_HONEYBADGER_VERSION should match the Stable tag in readme.txt.');
         $this->assertSame( '7.3.0', HBAPP_HONEYBADGER_PHP_MIN );
 
         $this->assertFileExists( HBAPP_HONEYBADGER_PLUGIN_FILE );
@@ -52,5 +53,24 @@ class Honeybadger_Init_Test extends WP_UnitTestCase {
         $url = menu_page_url( 'honeybadger-application-monitoring', false );
         $this->assertIsString( $url );
         $this->assertStringContainsString( 'page=honeybadger-application-monitoring', $url );
+    }
+
+    /**
+     * Read version from readme.txt (line 4: "Stable tag: X.Y.Z").
+     */
+    private function get_version_tag_from_readme() {
+        $readme_file = dirname(__DIR__) . '/readme.txt';
+        $this->assertFileExists($readme_file, 'readme.txt should exist at the project root.');
+        $lines = @file($readme_file, FILE_IGNORE_NEW_LINES);
+        $this->assertIsArray($lines, 'Failed to read readme.txt');
+        $this->assertTrue(isset($lines[3]), 'readme.txt should have at least 4 lines to read the Stable tag.');
+        $line4 = trim($lines[3]);
+        $this->assertMatchesRegularExpression('/^Stable tag:\s*(.+)$/i', $line4, 'Line 4 of readme.txt should define the Stable tag.');
+
+        if (preg_match('/^Stable tag:\s*(.+)$/i', $line4, $m)) {
+            return trim($m[1]);
+        }
+
+        return null;
     }
 }
