@@ -236,7 +236,6 @@ class HBAPP_HoneybadgerSettings {
         <?php
     }
 
-    // New renderers
     public function php_report_non_fatal_render() {
         $options = get_option('hbapp_honeybadger_settings');
         ?>
@@ -266,9 +265,11 @@ class HBAPP_HoneybadgerSettings {
     }
 
     public function settings_php_section_callback() {
+        // no-op
     }
 
     public function settings_js_section_callback() {
+        // no-op
     }
 
     public function options_page() {

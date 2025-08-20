@@ -22,6 +22,8 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
         restore_error_handler();
         restore_exception_handler();
 
+        wp_set_current_user( 0 );
+
         parent::tear_down();
     }
 
