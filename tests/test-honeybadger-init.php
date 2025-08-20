@@ -5,7 +5,7 @@ class Honeybadger_Init_Test extends WP_UnitTestCase {
     private $adminUserId;
 
     public function set_up(): void {
-        parent::setUp();
+        parent::set_up();
 
         // Ensure we run menu-related tests with a user who can manage options.
         $this->adminUserId = $this->factory->user->create( [ 'role' => 'administrator' ] );
@@ -19,7 +19,7 @@ class Honeybadger_Init_Test extends WP_UnitTestCase {
 
     public function tear_down(): void {
         wp_set_current_user( 0 );
-        parent::tearDown();
+        parent::tear_down();
     }
 
 

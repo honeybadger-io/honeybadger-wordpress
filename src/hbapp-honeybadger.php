@@ -266,7 +266,7 @@ class HBAPP_Honeybadger {
         $this->js_reporting_enabled = ($wpOptions['hbapp_honeybadger_js_enabled'] ?? 1) === 1;
         $this->js_api_key = $wpOptions['hbapp_honeybadger_js_api_key'] ?? '';
         $this->js_send_test_notification = ($wpOptions['hbapp_honeybadger_js_send_test_notification'] ?? 0) === 1;
-        $this->php_report_non_fatal = ($wpOptions['hbapp_honeybadger_php_report_non_fatal'] ?? 0) == 1;
+        $this->php_report_non_fatal = ($wpOptions['hbapp_honeybadger_php_report_non_fatal'] ?? 0) === 1;
 
         $hbConfigFromWp = [];
         if (!empty($wpOptions['hbapp_honeybadger_endpoint'])) {
@@ -279,7 +279,7 @@ class HBAPP_Honeybadger {
             $hbConfigFromWp['version'] = $wpOptions['hbapp_honeybadger_version'];
         }
 
-        $hbConfigFromWp['capture_deprecations'] = ($wpOptions['hbapp_honeybadger_php_capture_deprecations'] ?? 0) == 1;
+        $hbConfigFromWp['capture_deprecations'] = ($wpOptions['hbapp_honeybadger_php_capture_deprecations'] ?? 0) === 1;
 
         $this->config = new \Honeybadger\Config($hbConfigFromWp);
     }

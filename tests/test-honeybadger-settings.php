@@ -97,7 +97,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
         $this->assertSame( 'dummy-key-for-tests', $opts['hbapp_honeybadger_php_api_key'] );
 
         // Assert: the mock HTTP client was called to send the test notification.
-        $this->assertGreaterThanOrEqual( 1, count( $history ), 'Expected at least one HTTP request to Honeybadger.' );
+        $this->assertCount( 1, $history, 'Expected at least one HTTP request to Honeybadger.' );
         $transaction = $history[0];
         $this->assertArrayHasKey( 'request', $transaction );
         $request = $transaction['request'];
@@ -157,7 +157,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
         error_reporting( E_ALL );
 
         $history = [];
-        add_filter('hbapp_honeybadger_http_client', function($client, $config) use (&$history) {
+        add_filter('hbapp_honeybadger_http_client', function(?\GuzzleHttp\Client $client, array $config) use (&$history) {
             $mock = new \GuzzleHttp\Handler\MockHandler([
                 new \GuzzleHttp\Psr7\Response(201, [], json_encode(['id' => 'test']))
             ]);
@@ -181,7 +181,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
         // Restore error_reporting
         error_reporting( $prev );
 
-        $this->assertGreaterThanOrEqual( 1, count( $history ), 'Expected a deprecation to be reported to Honeybadger.' );
+        $this->assertCount( 1, $history, 'Expected a deprecation to be reported to Honeybadger.' );
         $this->assertSame( 'POST', $history[0]['request']->getMethod() );
         $this->assertSame( '/v1/notices', $history[0]['request']->getUri()->getPath() );
     }
@@ -236,7 +236,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
         error_reporting( E_ALL );
 
         $history = [];
-        add_filter('hbapp_honeybadger_http_client', function($client, $config) use (&$history) {
+        add_filter('hbapp_honeybadger_http_client', function(?\GuzzleHttp\Client $client, array $config) use (&$history) {
             $mock = new \GuzzleHttp\Handler\MockHandler([
                 new \GuzzleHttp\Psr7\Response(201, [], json_encode(['id' => 'test']))
             ]);
@@ -258,7 +258,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
 
         error_reporting( $prev );
 
-        $this->assertSame( 1, count( $history ), 'Expected a single warning to be reported to Honeybadger.' );
+        $this->assertCount( 1, $history, 'Expected a single warning to be reported to Honeybadger.' );
         $this->assertSame( 'POST', $history[0]['request']->getMethod() );
         $this->assertSame( '/v1/notices', $history[0]['request']->getUri()->getPath() );
     }
@@ -280,7 +280,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
         error_reporting( E_ALL );
 
         $history = [];
-        add_filter('hbapp_honeybadger_http_client', function($client, $config) use (&$history) {
+        add_filter('hbapp_honeybadger_http_client', function(?\GuzzleHttp\Client $client, array $config) use (&$history) {
             $mock = new \GuzzleHttp\Handler\MockHandler([
             ]);
             $handlerStack = \GuzzleHttp\HandlerStack::create($mock);
