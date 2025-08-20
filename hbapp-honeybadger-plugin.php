@@ -12,7 +12,7 @@
  * Plugin URI:        https://github.com/honeybadger-io/honeybadger-wordpress
  * Description:       Honeybadger error (PHP and JavaScript) reporting for WordPress.
  * Tags:              honeybadger, error monitoring, exception tracking, error tracking, bug tracking, error reporting, exception reporting, bug reporting
- * Version:           0.1.1
+ * Version:           0.1.2
  * Tested up to:      6.8
  * Requires at least: 5.3
  * Requires PHP:      7.3
@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('HBAPP_HONEYBADGER_VERSION', '0.1.0');
+define('HBAPP_HONEYBADGER_VERSION', '0.1.2');
 define('HBAPP_HONEYBADGER_PHP_MIN', '7.3.0');
 define('HBAPP_HONEYBADGER_PLUGIN_FILE', __FILE__);
 define('HBAPP_HONEYBADGER_PLUGIN_DIR', dirname(__FILE__));
@@ -63,7 +63,7 @@ add_action('plugins_loaded', function () {
 
 // Register uninstall hook
 function hbapp_honeybadger_uninstall() {
-    delete_option('honeybadger_app_monitoring_settings');
+    delete_option('hbapp_honeybadger_settings');
 }
 
 register_uninstall_hook(__FILE__, 'hbapp_honeybadger_uninstall');

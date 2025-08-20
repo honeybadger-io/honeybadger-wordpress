@@ -28,10 +28,22 @@ A WordPress plugin for error tracking with [Honeybadger](https://www.honeybadger
 - [x] User context tracking
 - [ ] Custom error type filtering
 
+## Testing
+
+The test environment was setup using the official [WP-CLI plugin](https://github.com/wp-cli/scaffold-command#wp-scaffold-plugin-tests).
+To run the tests locally, you need to have the following installed:
+- PHP (`brew install php && brew services start php`)
+- MySQL (`brew install mysql && brew services start mysql`)
+- Subversion (`brew install svn`)
+
+Then:
+- Run `composer install`.
+- Run `bash bin/install-wp-tests.sh wordpress_test root '' localhost latest`. This will install Wordpress to a `/tmp` folder, along with a database `wordpress_test`.
+- Run `./vendor/bin/phpunit`
 
 ## Releasing
 
-1. Update the version number in `honeybadger-application-monitoring.php`.
+1. Update the version number in `hbapp-honeybadger-plugin.php` (both the PHPDoc and the env variable `HBAPP_HONEYBADGER_VERSION`).
 2. Update the `readme.txt` file with the new version number.
 3. Push a new tag to the repository with the new version number.
 4. The previous step should trigger the GitHub Actions workflow to build the plugin and deploy it to the WordPress Plugin Directory.
