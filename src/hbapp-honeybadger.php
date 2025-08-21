@@ -136,8 +136,13 @@ class HBAPP_Honeybadger {
         });
 
         if ($this->php_send_test_notification) {
-            $this->client->notify(new Exception('Test PHP error from WordPress Honeybadger plugin.'));
             $this->update_settings(['hbapp_honeybadger_php_send_test_notification' => 0]);
+            try {
+                $this->client->notify(new Exception('Test PHP error from WordPress Honeybadger plugin.'));
+            }
+            catch (Exception $e) {
+                wp_admin_notice('Honeybadger - Could not send test notification: ' . $e->getMessage(), ['type' => 'error']);
+            }
         }
     }
 
@@ -211,8 +216,8 @@ class HBAPP_Honeybadger {
         }
 
         if ($this->js_send_test_notification) {
-            wp_add_inline_script('hbapp_honeybadger_js', 'Honeybadger.notify("Test JavaScript error from WordPress Honeybadger plugin.");');
             $this->update_settings(['hbapp_honeybadger_js_send_test_notification' => 0]);
+            wp_add_inline_script('hbapp_honeybadger_js', 'Honeybadger.notify("Test JavaScript error from WordPress Honeybadger plugin.");');
         }
     }
 
