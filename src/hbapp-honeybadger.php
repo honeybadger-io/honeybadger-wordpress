@@ -79,6 +79,13 @@ class HBAPP_Honeybadger {
         $config = array_merge($this->config->all(), [
             'api_key' => $this->php_api_key,
             'report_data' => $this->php_reporting_enabled,
+            'service_exception_handler' => function (Honeybadger\Exceptions\ServiceException $e) {
+                if (is_admin()) {
+                    // show an error message if we are in an Admin page
+                    wp_admin_notice($e->getMessage(), ['type' => 'error']);
+                }
+                error_log($e->getMessage() . ': ' . $e->getTraceAsString());
+            },
             'notifier' => [
                 'name' => 'honeybadger-wordpress',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-wordpress',
