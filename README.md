@@ -53,7 +53,7 @@ Then:
 A working WordPress installation is necessary to use the plugin during development.  
 Once WordPress is up and running:
 - Run `composer install` in the plugin folder to install dependencies
-- Run `ln -s /absolute/path/to/honeybadger-wordpress /absolute/path/to/wordpress/wp-content/plugins/honeybadger-application/monitoring`
+- Run `ln -s /absolute/path/to/honeybadger-wordpress /absolute/path/to/wordpress/wp-content/plugins/honeybadger-application-monitoring`
 
 Now any changes to the plugin code will be reflected immediately in your local WordPress installation.
 
