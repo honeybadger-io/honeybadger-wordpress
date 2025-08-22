@@ -147,7 +147,7 @@ class HBAPP_Honeybadger {
             try {
                 $this->client->notify(new Exception('Test PHP error from WordPress Honeybadger plugin.'));
             }
-            catch (Exception $e) {
+            catch (Throwable $e) {
                 wp_admin_notice('Honeybadger - Could not send test notification: ' . $e->getMessage(), ['type' => 'error']);
             }
         }
