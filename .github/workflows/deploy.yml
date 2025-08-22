@@ -18,6 +18,8 @@ jobs:
       - name: Install dependencies
         uses: php-actions/composer@master
         with:
+          dev: no
+          args: --prefer-dist --optimize-autoloader
           php_version: '8.4'
 
       - name: Deploy
