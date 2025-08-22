@@ -9,6 +9,7 @@ readme.md
 
 # Plugin Testing files
 tests
+bin
 .phpcs.xml.dist
 .phpunit.result.cache
 php-build.ini

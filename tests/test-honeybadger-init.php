@@ -2,14 +2,14 @@
 
 class Honeybadger_Init_Test extends WP_UnitTestCase {
 
-    private $admin_user_id;
+    private $adminUserId;
 
-    public function setUp(): void {
-        parent::setUp();
+    public function set_up(): void {
+        parent::set_up();
 
         // Ensure we run menu-related tests with a user who can manage options.
-        $this->admin_user_id = $this->factory->user->create( [ 'role' => 'administrator' ] );
-        wp_set_current_user( $this->admin_user_id );
+        $this->adminUserId = $this->factory->user->create( [ 'role' => 'administrator' ] );
+        wp_set_current_user( $this->adminUserId );
 
         // Use an admin screen context so admin hooks behave as expected.
         if ( function_exists( 'set_current_screen' ) ) {
@@ -17,9 +17,9 @@ class Honeybadger_Init_Test extends WP_UnitTestCase {
         }
     }
 
-    public function tearDown(): void {
+    public function tear_down(): void {
         wp_set_current_user( 0 );
-        parent::tearDown();
+        parent::tear_down();
     }
 
 
