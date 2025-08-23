@@ -80,7 +80,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
 
             return new \GuzzleHttp\Client([
                 'handler' => $handlerStack,
-                'base_uri' => $config['endpoint'] ?? 'https://api.honeybadger.io/'
+                'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL
             ]);
         }, 10, 2);
 
@@ -169,7 +169,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
 
             return new \GuzzleHttp\Client([
                 'handler' => $handlerStack,
-                'base_uri' => $config['endpoint'] ?? 'https://api.honeybadger.io/'
+                'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL
             ]);
         }, 10, 2);
         $plugin = new HBAPP_Honeybadger();
@@ -206,7 +206,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
             ]);
             $stack = \GuzzleHttp\HandlerStack::create( $mock );
             $stack->push( \GuzzleHttp\Middleware::history( $history ) );
-            return new \GuzzleHttp\Client([ 'handler' => $stack, 'base_uri' => $config['endpoint'] ?? 'https://api.honeybadger.io/' ]);
+            return new \GuzzleHttp\Client([ 'handler' => $stack, 'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL ]);
         }, 10, 2 );
 
         $plugin = new HBAPP_Honeybadger();
@@ -248,7 +248,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
 
             return new \GuzzleHttp\Client([
                 'handler' => $handlerStack,
-                'base_uri' => $config['endpoint'] ?? 'https://api.honeybadger.io/'
+                'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL
             ]);
         }, 10, 2);
         $plugin = new HBAPP_Honeybadger();
@@ -291,7 +291,7 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
 
             return new \GuzzleHttp\Client([
                 'handler' => $handlerStack,
-                'base_uri' => $config['endpoint'] ?? 'https://api.honeybadger.io/'
+                'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL
             ]);
         }, 10, 2);
         $plugin = new HBAPP_Honeybadger();
@@ -302,5 +302,100 @@ class Honeybadger_Settings_Test extends WP_UnitTestCase {
         error_reporting( $prev );
 
         $this->assertCount( 0, $history, 'Did not expect a warning to be reported when non-fatal reporting is disabled.' );
+    }
+
+    public function test_default_endpoint_used_when_setting_empty() {
+        update_option('hbapp_honeybadger_settings', [
+            'hbapp_honeybadger_php_enabled' => 1,
+            'hbapp_honeybadger_php_api_key' => 'dummy-key',
+            'hbapp_honeybadger_endpoint' => '',
+            'hbapp_honeybadger_app_endpoint' => '',
+            'hbapp_honeybadger_js_enabled' => 0,
+            'hbapp_honeybadger_js_api_key' => '',
+        ]);
+
+        $captured = [];
+        add_filter('hbapp_honeybadger_http_client', function($client, $config) use (&$captured) {
+            $captured = $config;
+            $mock = new \GuzzleHttp\Handler\MockHandler([]);
+            $stack = \GuzzleHttp\HandlerStack::create($mock);
+            return new \GuzzleHttp\Client(['handler' => $stack, 'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL]);
+        }, 10, 2);
+
+        $plugin = new HBAPP_Honeybadger();
+        $plugin->boot();
+
+        $this->assertArrayHasKey('endpoint', $captured);
+        $this->assertArrayHasKey('app_endpoint', $captured);
+        $this->assertSame(\Honeybadger\Honeybadger::API_URL, $captured['endpoint']);
+        $this->assertSame(\Honeybadger\Honeybadger::APP_URL, $captured['app_endpoint']);
+    }
+
+    public function test_custom_endpoint_used_when_setting_has_value() {
+        $custom = 'https://example.test/api';
+        update_option('hbapp_honeybadger_settings', [
+            'hbapp_honeybadger_php_enabled' => 1,
+            'hbapp_honeybadger_php_api_key' => 'dummy-key',
+            'hbapp_honeybadger_endpoint' => $custom,
+            'hbapp_honeybadger_js_enabled' => 0,
+        ]);
+
+        $captured = [];
+        add_filter('hbapp_honeybadger_http_client', function($client, $config) use (&$captured) {
+            $captured = $config;
+            $mock = new \GuzzleHttp\Handler\MockHandler([]);
+            $stack = \GuzzleHttp\HandlerStack::create($mock);
+            return new \GuzzleHttp\Client(['handler' => $stack, 'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL]);
+        }, 10, 2);
+
+        $plugin = new HBAPP_Honeybadger();
+        $plugin->boot();
+
+        $this->assertSame($custom, $captured['endpoint']);
+    }
+
+    public function test_default_app_endpoint_used_when_setting_empty() {
+        update_option('hbapp_honeybadger_settings', [
+            'hbapp_honeybadger_php_enabled' => 1,
+            'hbapp_honeybadger_php_api_key' => 'dummy-key',
+            'hbapp_honeybadger_app_endpoint' => '',
+            'hbapp_honeybadger_js_enabled' => 0,
+        ]);
+
+        $captured = [];
+        add_filter('hbapp_honeybadger_http_client', function($client, $config) use (&$captured) {
+            $captured = $config;
+            $mock = new \GuzzleHttp\Handler\MockHandler([]);
+            $stack = \GuzzleHttp\HandlerStack::create($mock);
+            return new \GuzzleHttp\Client(['handler' => $stack, 'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL]);
+        }, 10, 2);
+
+        $plugin = new HBAPP_Honeybadger();
+        $plugin->boot();
+
+        $this->assertSame(\Honeybadger\Honeybadger::APP_URL, $captured['app_endpoint']);
+    }
+
+    public function test_custom_app_endpoint_used_when_setting_has_value() {
+        $custom = 'https://app.example.test/';
+        update_option('hbapp_honeybadger_settings', [
+            'hbapp_honeybadger_php_enabled' => 1,
+            'hbapp_honeybadger_php_api_key' => 'dummy-key',
+            'hbapp_honeybadger_app_endpoint' => $custom,
+            'hbapp_honeybadger_js_enabled' => 0,
+        ]);
+
+        $captured = [];
+        add_filter('hbapp_honeybadger_http_client', function($client, $config) use (&$captured) {
+            $captured = $config;
+            $mock = new \GuzzleHttp\Handler\MockHandler([]);
+            $stack = \GuzzleHttp\HandlerStack::create($mock);
+            return new \GuzzleHttp\Client(['handler' => $stack, 'base_uri' => $config['endpoint'] ?? \Honeybadger\Honeybadger::API_URL]);
+        }, 10, 2);
+
+        $plugin = new HBAPP_Honeybadger();
+        $plugin->boot();
+
+        $this->assertSame($custom, $captured['app_endpoint']);
     }
 }
