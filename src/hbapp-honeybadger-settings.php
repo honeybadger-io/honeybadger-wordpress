@@ -35,7 +35,7 @@ class HBAPP_HoneybadgerSettings {
 
         add_settings_field(
             'hbapp_honeybadger_endpoint',
-            __('Api Endpoint', 'honeybadger-application-monitoring'),
+            __('API Endpoint', 'honeybadger-application-monitoring'),
             [$this, 'endpoint_render'],
             'honeybadger-application-monitoring',
             'hbapp_honeybadger_settings_section'

@@ -187,6 +187,7 @@ class HBAPP_Honeybadger {
 
         wp_add_inline_script('hbapp_honeybadger_js', sprintf(
             'Honeybadger.configure({
+                endpoint: "%s",
                 apiKey: "%s",
                 environment: "%s",
                 revision: "%s",
@@ -197,6 +198,7 @@ class HBAPP_Honeybadger {
                 url: "https://github.com/honeybadger-io/honeybadger-wordpress",
                 version: "%s"
             })',
+            esc_js($this->config->get('endpoint')),
             esc_js($this->js_api_key),
             esc_js($this->config->get('environment_name')),
             esc_js($this->config->get('version')),

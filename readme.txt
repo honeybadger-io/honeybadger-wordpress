@@ -1,7 +1,7 @@
 === Honeybadger Application Monitoring ===
 Contributors: pangratioscosma
 Tags: honeybadger, error monitoring, error reporting, exception reporting, bug reporting
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 Tested up to: 6.8
 Requires at least: 5.3
 Requires PHP: 7.3
