@@ -82,7 +82,7 @@ class HBAPP_Honeybadger {
             'service_exception_handler' => function (Honeybadger\Exceptions\ServiceException $e) {
                 if (is_admin()) {
                     // show an error message if we are in an Admin page
-                    wp_admin_notice($e->getMessage(), ['type' => 'error']);
+                    wp_admin_notice($e->getMessage(), ['type' => 'error', 'attributes' => ['style' => 'margin-left:195px;"']]);
                 }
                 error_log($e->getMessage() . ': ' . $e->getTraceAsString());
             },
@@ -148,7 +148,7 @@ class HBAPP_Honeybadger {
                 $this->client->notify(new Exception('Test PHP error from WordPress Honeybadger plugin.'));
             }
             catch (Throwable $e) {
-                wp_admin_notice('Honeybadger - Could not send test notification: ' . $e->getMessage(), ['type' => 'error']);
+                wp_admin_notice('Honeybadger - Could not send test notification: ' . $e->getMessage(), ['type' => 'error', 'attributes' => ['style' => 'margin-left:195px;"']]);
             }
         }
     }
@@ -187,6 +187,7 @@ class HBAPP_Honeybadger {
 
         wp_add_inline_script('hbapp_honeybadger_js', sprintf(
             'Honeybadger.configure({
+                endpoint: "%s",
                 apiKey: "%s",
                 environment: "%s",
                 revision: "%s",
@@ -197,6 +198,7 @@ class HBAPP_Honeybadger {
                 url: "https://github.com/honeybadger-io/honeybadger-wordpress",
                 version: "%s"
             })',
+            esc_js($this->config->get('endpoint')),
             esc_js($this->js_api_key),
             esc_js($this->config->get('environment_name')),
             esc_js($this->config->get('version')),
@@ -264,6 +266,7 @@ class HBAPP_Honeybadger {
             'hbapp_honeybadger_php_api_key' => '',
             'hbapp_honeybadger_php_send_test_notification' => 0,
             'hbapp_honeybadger_endpoint' => '',
+            'hbapp_honeybadger_app_endpoint' => '',
             'hbapp_honeybadger_environment_name' => '',
             'hbapp_honeybadger_version' => '',
             'hbapp_honeybadger_js_enabled' => 1,
@@ -283,6 +286,9 @@ class HBAPP_Honeybadger {
         $hbConfigFromWp = [];
         if (!empty($wpOptions['hbapp_honeybadger_endpoint'])) {
             $hbConfigFromWp['endpoint'] = $wpOptions['hbapp_honeybadger_endpoint'];
+        }
+        if (!empty($wpOptions['hbapp_honeybadger_app_endpoint'])) {
+            $hbConfigFromWp['app_endpoint'] = $wpOptions['hbapp_honeybadger_app_endpoint'];
         }
         if (!empty($wpOptions['hbapp_honeybadger_environment_name'])) {
             $hbConfigFromWp['environment_name'] = $wpOptions['hbapp_honeybadger_environment_name'];
